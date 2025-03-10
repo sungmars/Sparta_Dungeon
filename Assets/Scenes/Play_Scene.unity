@@ -286,8 +286,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -1680,7 +1680,7 @@ MonoBehaviour:
   curValue: 0
   startValue: 100
   maxValue: 100
-  passiveValue: 0
+  passiveValue: 5
   uiBar: {fileID: 2091172228}
 --- !u!114 &264938359
 MonoBehaviour:
@@ -2490,6 +2490,7 @@ MonoBehaviour:
   maxXLook: 85
   lookSensitivity: 0.06
   canLook: 1
+  staminaCostPerJump: 10
 --- !u!54 &499759172
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4318,7 +4319,7 @@ MonoBehaviour:
   curValue: 0
   startValue: 100
   maxValue: 100
-  passiveValue: 0
+  passiveValue: 1
   uiBar: {fileID: 16529873}
 --- !u!114 &954596826
 MonoBehaviour:
@@ -8294,8 +8295,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
