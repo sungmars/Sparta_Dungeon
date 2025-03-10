@@ -2486,8 +2486,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   cameraContain: {fileID: 1075280190}
-  minXLook: 1
-  maxXLook: 10
+  minXLook: -85
+  maxXLook: 85
   lookSensitivity: 0.06
   canLook: 1
 --- !u!54 &499759172
@@ -2624,7 +2624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b12f3b7a691a143b7e901b7d071394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiCondition: {fileID: 0}
+  uiCondition: {fileID: 1659779262}
 --- !u!1 &503206803
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [Header("Movement")]
     public float moveSpeed;
     private Vector2 curMovementInput;
     public float jumpPower;
@@ -21,25 +20,34 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouse;
     public bool canLook = true;
 
+    [Header("Stamina")]
+    public float staminaCostPerJump = 10f;
+
     public Action inventory;
     private Rigidbody rb;
+    private Condition condition;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        condition = GetComponent<Condition>();
     }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
+
     private void Update()
     {
         Debug.DrawRay(transform.position + (transform.forward * 0.2f) + (transform.up * 0.2f), Vector3.down, Color.white);
     }
+
     private void FixedUpdate()
     {
         Move();
     }
+
     private void LateUpdate()
     {
         if (canLook)
@@ -47,6 +55,7 @@ public class PlayerController : MonoBehaviour
             CameraLook();
         }
     }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -58,10 +67,11 @@ public class PlayerController : MonoBehaviour
             curMovementInput = Vector2.zero;
         }
     }
+
     void CameraLook()
     {
         camCurXRot += mouse.y * lookSensitivity;
-        camCurXRot = Mathf.Clamp(camCurXRot, minXLook, maxXLook);//최소값보다 작아지면 최소값, 최대값보다 커지면 최대값 반환
+        camCurXRot = Mathf.Clamp(camCurXRot, minXLook, maxXLook);
         cameraContain.localEulerAngles = new Vector3(-camCurXRot, 0, 0);
 
         transform.eulerAngles += new Vector3(0, mouse.x * lookSensitivity, 0);
@@ -74,18 +84,20 @@ public class PlayerController : MonoBehaviour
         dir.y = rb.velocity.y;
         rb.velocity = dir;
     }
+
     public void OnLook(InputAction.CallbackContext context)
     {
         mouse = context.ReadValue<Vector2>();
     }
+
     public void OnJump(InputAction.CallbackContext context)
     {
-        bool grounded = IsGrounded();
-        if (context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started && IsGrounded() && condition.UseStamina(staminaCostPerJump))
         {
             rb.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
         }
     }
+
     bool IsGrounded()
     {
         Ray[] rays = new Ray[4]
