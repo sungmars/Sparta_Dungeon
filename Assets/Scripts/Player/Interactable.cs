@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Interactable : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class Interactable : MonoBehaviour
 
         // InputAction 초기화
         interactAction = new InputAction(type: InputActionType.Button, binding: "<Mouse>/leftButton");
-        interactAction.performed += OnInteractInput;
+        interactAction.performed += ctx => OnInteract();
         interactAction.Enable();
     }
 
@@ -40,11 +39,18 @@ public class Interactable : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
+                Debug.Log($"[Interactable] 감지된 오브젝트: {hit.collider.gameObject.name}");
 
                 if (hit.collider.gameObject != curInteractGameObject)
                 {
                     curInteractGameObject = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
+
+                    if (curInteractable != null)
+                    {
+                        Debug.Log($"[Interactable] {curInteractGameObject.name}에서 IInteractable 감지됨!");
+                    }
+
                     SetPromptText();
                 }
             }
@@ -70,10 +76,12 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    private void OnInteractInput(InputAction.CallbackContext context)
+
+    public void OnInteract()
     {
-        if (context.phase == InputActionPhase.Performed && curInteractable != null)
+        if (curInteractable != null)
         {
+            Debug.Log($"[Interactable] {curInteractGameObject.name}과 상호작용 시도!");
 
             if (curInteractGameObject != null)
             {
@@ -94,5 +102,3 @@ public class Interactable : MonoBehaviour
         }
     }
 }
-
-

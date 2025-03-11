@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +6,12 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
+    private float baseSpeed = 5f; // ✅ 기본 속도를 명확하게 고정
+    private float currentSpeed; // ✅ 현재 속도를 저장
     private Vector2 curMovementInput;
     public float jumpPower;
     public LayerMask groundLayerMask;
+
     [Header("Look")]
     public Transform cameraContain;
     public float minXLook;
@@ -23,7 +24,6 @@ public class PlayerController : MonoBehaviour
     [Header("Stamina")]
     public float staminaCostPerJump = 10f;
 
-    public Action inventory;
     private Rigidbody rb;
     private Condition condition;
 
@@ -31,16 +31,12 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         condition = GetComponent<Condition>();
+        currentSpeed = baseSpeed; // ✅ 현재 속도를 기본 속도로 초기화
     }
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void Update()
-    {
-        Debug.DrawRay(transform.position + (transform.forward * 0.2f) + (transform.up * 0.2f), Vector3.down, Color.white);
     }
 
     private void FixedUpdate()
@@ -80,9 +76,11 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
-        dir *= moveSpeed;
+        dir *= currentSpeed; // ✅ 무조건 현재 속도를 적용!
         dir.y = rb.velocity.y;
         rb.velocity = dir;
+
+        Debug.Log($"[PlayerController] 이동 중! 현재 이동 속도 적용됨: {currentSpeed}");
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -116,5 +114,23 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+ 
+    public void ApplySpeedBuff(float amount)
+    {
+        currentSpeed += amount;
+        Debug.Log($"[PlayerController] 속도 증가! 현재 속도: {currentSpeed}");
+    }
+
+    public void ResetSpeed()
+    {
+        currentSpeed = baseSpeed;
+        Debug.Log($"[PlayerController] 속도 복귀! 현재 속도: {currentSpeed}");
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
     }
 }

@@ -5,18 +5,20 @@ public interface IInteractable
     public string GetInteractPrompt();
     public void OnInteract();
 }
-public class Item : MonoBehaviour,IInteractable
+
+public class Item : MonoBehaviour, IInteractable
 {
     public ItemData data;
 
     public string GetInteractPrompt()
     {
-        string str = $"{data.displayName}\n{data.description}";
-        return str;
+        return $"{data.displayName}\n{data.description}";
     }
 
     public void OnInteract()
     {
+        Debug.Log($"[Item] {data.displayName} 획득!");
+
         CharacterManager.Instance.Player.itemData = data;
         CharacterManager.Instance.Player.addItem?.Invoke();
 
