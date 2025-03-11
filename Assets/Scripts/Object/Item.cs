@@ -19,6 +19,10 @@ public class Item : MonoBehaviour,IInteractable
     {
         CharacterManager.Instance.Player.itemData = data;
         CharacterManager.Instance.Player.addItem?.Invoke();
-        Destroy(gameObject);
+
+        if (gameObject != CharacterManager.Instance.Player.gameObject)
+        {
+            Destroy(gameObject);
+        }
     }
 }

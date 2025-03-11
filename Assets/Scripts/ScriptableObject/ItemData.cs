@@ -3,13 +3,12 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Equipable,
-    Consumable,
-    Resource
+    Consumable
 }
 public enum ConsumableType
 {
-    Health
+    Health,
+    Speed
 }
 [Serializable]
 public class ItemDataConsumable
@@ -18,7 +17,7 @@ public class ItemDataConsumable
     public float value;
 }
 [CreateAssetMenu(fileName ="Item",menuName ="New Item")]
-public class ItemData : MonoBehaviour
+public class ItemData : ScriptableObject
 {
     [Header("Info")]
     public string displayName;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Interactable : MonoBehaviour
 {
@@ -17,12 +18,18 @@ public class Interactable : MonoBehaviour
     public TextMeshProUGUI promptText;
     private Camera camera;
 
+    private InputAction interactAction;
+
     void Start()
     {
         camera = Camera.main;
+
+        // InputAction 초기화
+        interactAction = new InputAction(type: InputActionType.Button, binding: "<Mouse>/leftButton");
+        interactAction.performed += OnInteractInput;
+        interactAction.Enable();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Time.time - lastCheckTime > checkRate)
@@ -33,6 +40,7 @@ public class Interactable : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
+
                 if (hit.collider.gameObject != curInteractGameObject)
                 {
                     curInteractGameObject = hit.collider.gameObject;
@@ -48,22 +56,43 @@ public class Interactable : MonoBehaviour
             }
         }
     }
-        private void SetPromptText()
-        {
-        promptText.gameObject.SetActive(true);
-        promptText.text = curInteractable.GetInteractPrompt();
-        }   
 
-        public void OnIteractInput(InputAction.CallbackContext context)
+    private void SetPromptText()
+    {
+        if (curInteractable != null)
         {
-        if (context.phase == InputActionPhase.Started && curInteractable != null)
+            promptText.gameObject.SetActive(true);
+            promptText.text = curInteractable.GetInteractPrompt();
+        }
+        else
+        {
+            promptText.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnInteractInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed && curInteractable != null)
+        {
+
+            if (curInteractGameObject != null)
             {
+                Item itemComponent = curInteractGameObject.GetComponent<Item>();
+                if (itemComponent != null)
+                {
+                    GetItem getItem = curInteractGameObject.GetComponent<GetItem>();
+                    if (getItem != null)
+                    {
+                        getItem.SetItemData(itemComponent.data);
+                    }
+                }
+            }
             curInteractable.OnInteract();
             curInteractGameObject = null;
             curInteractable = null;
             promptText.gameObject.SetActive(false);
-            }
         }
+    }
 }
 
 
